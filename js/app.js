@@ -78,7 +78,5 @@ function highlightError(){
                     "</span>" + quote.slice(wrongInd + 1, )
 }
 
-nd start
-// 
 startRound()
 

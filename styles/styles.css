@@ -1,3 +1,37 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    max-width: 80%;
+    margin: auto;
+    text-align: center;
+}
+
+.heading {
+    font-size: 3.5em;
+    padding: 1em 1.5em;
+}
+
+#quote {
+    font-size: 1.6em;
+    border: 1px solid black;
+    padding: 1em;
+}
+
+#type-div {
+    margin: 1em 0;
+    text-align: center;
+    /* border: 1px solid black; */
+}
+
+#type {
+    width: 95%;
+    padding: 0.5em;
+    font-size: 2em;
+}
+
 
 #highlight-success {
     background-color: lightgreen;
@@ -5,4 +39,15 @@
 
 #highlight-failure {
     background-color: lightcoral;
+}
+
+button {
+    font-size: 2.5em;
+    /* width: 5em; */
+}
+
+#counter {
+    display: block;
+    text-align: right;
+    font-size: 1.8em;
 }

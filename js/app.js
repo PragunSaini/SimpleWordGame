@@ -1,5 +1,6 @@
 // Initialize quote here
-let quote = `Home is behind, the world ahead, and there are many paths to tread through shadows to the edge of night, until the stars are all alight.`;
+// let quote = `Home is behind, the world ahead, and there are many paths to tread through shadows to the edge of night, until the stars are all alight.`;
+let quote = 'Wow great'
 
 // Keep track of correct spelling to highlight
 let successInd = 0
@@ -7,16 +8,36 @@ let successInd = 0
 let wrongInd
 let wrong = false
 
+// Track the time taken
+let minutes = 0, seconds = 0
+let timer = null
+
 // Variable to display the text
 const quoteDiv = document.querySelector('#quote')
 const textField = document.querySelector('#type')
+const startBtn = document.querySelector('#start-btn')
+const counter = document.querySelector('#counter')
 
 // Setup and start new round
-function startRound(){
+function initializeAndStartRound(){
     quoteDiv.innerHTML = quote
     textField.value = ""
     successInd = 0
     wrong = false
+
+    // Start time tracking
+    minutes = seconds = 0
+    timer = setInterval(() => {
+        seconds += 1
+        if (seconds == 60){
+            seconds = 0
+            minutes += 1
+        }
+        counter.textContent = minutes < 10 ? "0" + minutes : minutes
+        counter.textContent += ":"
+        counter.textContent += seconds < 10 ? "0" + seconds : seconds
+    }, 1000)
+
     activateTextField()
 }
 
@@ -47,10 +68,11 @@ function trackChanges(){
             successInd += typedText.length
         }
         // Check if full quote typed
-        if (quote.endsWith(typedText)){
+        if (typedText != "" && quote.endsWith(typedText)){
             // Clear the text field
             textField.value = "";
             successInd += typedText.length
+            roundFinish()
         }
     }
     // if typed text doesn't match quote
@@ -78,5 +100,20 @@ function highlightError(){
                     "</span>" + quote.slice(wrongInd + 1, )
 }
 
-startRound()
 
+function startGame(){
+    textField.value = ""
+    startBtn.addEventListener('click', event => {
+        startBtn.style.visibility = "hidden"
+        initializeAndStartRound()
+    })
+}
+
+
+function roundFinish(){
+    clearInterval(timer)
+    startBtn.style.visibility = "visible"
+    startBtn.textContent = "Start Again!"
+}
+
+startGame()

@@ -1,6 +1,6 @@
-// Initialize quote here
-// let quote = `Home is behind, the world ahead, and there are many paths to tread through shadows to the edge of night, until the stars are all alight.`;
-let quote = 'Wow great'
+// Quotes object
+let quotes = []
+let quote = null
 
 // Keep track of correct spelling to highlight
 let successInd = 0
@@ -14,7 +14,7 @@ let timer = null
 
 // Variable to display the text
 const quoteDiv = document.querySelector('#quote')
-const textField = document.querySelector('#type')
+const textField = document.querySelector('#textField')
 const startBtn = document.querySelector('#start-btn')
 const counter = document.querySelector('#counter')
 
@@ -38,6 +38,8 @@ function initializeAndStartRound(){
         counter.textContent += seconds < 10 ? "0" + seconds : seconds
     }, 1000)
 
+    // Focus and enable textField
+    textField.focus()
     activateTextField()
 }
 
@@ -56,6 +58,8 @@ function trackChanges(){
     // if matched
     if (typedText == quote.slice(successInd, successInd + typedText.length)){
         wrong = false
+        quoteDiv.classList.add('green-glow')
+        quoteDiv.classList.remove('red-glow')
 
         // Highlight the corresponding part of the quote
         highlight(successInd + typedText.length)
@@ -82,6 +86,8 @@ function trackChanges(){
             wrongInd = successInd + typedText.length - 1
             wrong = true
         }
+        quoteDiv.classList.remove('green-glow')
+        quoteDiv.classList.add('red-glow')
         // highlight error in the quote
         highlightError()
     }
@@ -100,20 +106,45 @@ function highlightError(){
                     "</span>" + quote.slice(wrongInd + 1, )
 }
 
-
-function startGame(){
-    textField.value = ""
-    startBtn.addEventListener('click', event => {
-        startBtn.style.visibility = "hidden"
-        initializeAndStartRound()
-    })
-}
-
-
+// Called when a round finished, and activates button to start new round
 function roundFinish(){
     clearInterval(timer)
     startBtn.style.visibility = "visible"
     startBtn.textContent = "Start Again!"
 }
 
-startGame()
+// Start the round by generating a quote combination
+function startGame(){
+    generateQuote()
+    textField.value = ""
+    startBtn.addEventListener('click', event => {
+        startBtn.style.visibility = "hidden"
+        generateQuote()
+        initializeAndStartRound()
+    })
+}
+
+// Utility function to generate a combination off three quotes
+function  generateQuote(){
+    let indexes = []
+    while(indexes.length < 3){
+        let i = Math.floor(Math.random() * 25)
+        if (!indexes.includes(i)){
+            indexes.push(i)
+        }
+    }
+    quote = quotes[indexes[0]] + " " +
+            quotes[indexes[1]] + " " +
+            quotes[indexes[2]] + " ";
+    quote = quote.trim()
+}
+
+// Fetches quotes from a REST API and stores them
+fetch('https://api.myjson.com/bins/1ce425')
+        .then((response) => {
+            return response.json()
+        })
+        .then((myJson) => {
+            quotes = myJson
+            startGame()
+        })
